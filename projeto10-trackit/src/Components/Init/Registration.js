@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import {React, useState} from "react";
 import { useNavigate } from "react-router-dom"
-import axios from "axios";
-import { postRegistration } from "./AxiosTrackit";
+import { postRegistration } from "../../Provider/AxiosTrackit";
 
 export default function Registration(){   
     const navigate=useNavigate();
@@ -13,22 +12,24 @@ export default function Registration(){
         password:""
     })
     function handleForm(e){
+        // console.log(e);
+        // debugger;
         e.preventDefault();
         setForm({...form,[e.target.name]:e.target.value,});
     } 
     function signUp(){
-        postRegistration(form).then((resp)=>{navigate("/")});
+        postRegistration(form).then((resp)=>{navigate("/");console.log(resp)}).catch((resp)=>{alert("Por favor preencha os campos corretamente")});
     }
     return(<DivRegistration>
         <ImgRegistration src="./imgs/icone.svg"/>
-        <FormRegistration>
+        <FormRegistration onSubmit={handleForm}>
             <EmailRegistration placeholder ="email" type="email" name="email" onChange={handleForm} required />
             <PasswordRegistration placeholder="senha" type="password" name="password" onChange={handleForm} required/>
             <NameRegistration placeholder ="nome" type="text" name="name" onChange={handleForm} required />
             <PhotoRegistration placeholder ="foto" type="url" name="image" onChange={handleForm} required />
-        </FormRegistration>
             <ButtonRegistration onClick={signUp}>Cadastrar</ButtonRegistration>
-        <H1Registration>Já tem uma conta? Faça login!</H1Registration>        
+        </FormRegistration>          
+        <H1Registration onClick={()=>{navigate("/")}}>Já tem uma conta? Faça login!</H1Registration>
     </DivRegistration>)
 }
 const FormRegistration=styled.form`
@@ -36,13 +37,13 @@ const FormRegistration=styled.form`
     flex-direction: column;
 `
 const DivRegistration=styled.div`
-    width: 375px;
+    width: 100%;
     height: 667px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    background-color: #ffffff;
 `
 const ImgRegistration=styled.img`
     margin-bottom: 30px;

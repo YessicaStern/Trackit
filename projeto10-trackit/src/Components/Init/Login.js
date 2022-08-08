@@ -1,29 +1,26 @@
 import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
-import { react, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
+import { postLogin } from "../../Provider/AxiosTrackit";
+
+import React from "react";
+import { AuthContext } from "../../Provider/Auth";
 
 export default function Login(){
+    const {token,setToken}=React.useContext(AuthContext);
+    const {habits,setHabits}=React.useContext(AuthContext);
     const navigate=useNavigate();
     const [form,setForm]=useState({
         email:"",
-        password:"",
+        password:"",    
     })
-
     function handleForm(e){
         e.preventDefault();
         setForm({...form,[e.target.name]:e.target.value,});
+        setHabits([]);
     }
     function axiosfunc(){
-        const promise= axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login",form);
-        promise.then(resultado);
-        function resultado(resp){
-            console.log(resp);
-        }
-        promise.catch(erro);
-        function erro(resp){
-            console.log(resp);
-        }
+        postLogin(form).then((resp)=>{setToken(resp.data.token);localStorage.setItem("token",resp.data.token);localStorage.setItem("image",resp.data.image);navigate("/hoje")}).catch((resp)=>(console.log(resp.response.status)));
     }
     return(<DivLogin>
         <ImgLogin src="./imgs/icone.svg"/>
@@ -32,7 +29,7 @@ export default function Login(){
             <PasswordLogin placeholder="senha" type="password" name="password" onChange={handleForm} required/>
         </FormLogin>
         <ButtonLogin onClick={axiosfunc}>Entrar</ButtonLogin>
-        <H1Login onClick={()=>{navigate("/cadastro")}}>Não tem uma conta? Cadastre-se!</H1Login>        
+        <H1Login onClick={()=>{navigate("/cadastro")}}>Não tem uma conta? Cadastre-se!</H1Login>
     </DivLogin>)
 }
 const FormLogin=styled.form`
@@ -40,13 +37,13 @@ const FormLogin=styled.form`
     flex-direction: column;
 `
 const DivLogin=styled.div`
-    width: 375px;
+    width: 100%;
     height: 667px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    background-color: #ffffff;
 `
 const ImgLogin=styled.img`
     margin-bottom: 30px;

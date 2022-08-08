@@ -1,20 +1,27 @@
-import { createGlobalStyle } from 'styled-components';
-import "./reset.css";
-
+import { AuthProvider } from './Provider/Auth';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React from "react";
-import Login from "./Components/Login";
+import GlobalStyle from "./Provider/style";
 
-import Registration from './Components/Registration';
+import Habits from "./Components/Habits/Habits";
+import Login from "./Components/Init/Login";
+import Registration from './Components/Init/Registration';
+import Today from './Components/Container/Today';
+
 
 export default function App(){
     return(
   <>
+  <AuthProvider>
+  <GlobalStyle/>  
   <BrowserRouter>
     <Routes>
         <Route path="/" element={<Login/>}/>
         <Route path="/cadastro" element={<Registration/>}/>
+        <Route path="/habitos" element={<Habits/>}/>
+        <Route path="/hoje" element={<Today/>}/>
     </Routes>
   </BrowserRouter>
+  </AuthProvider>
   </>)
  }

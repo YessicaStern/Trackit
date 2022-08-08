@@ -1,8 +1,6 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
-   v2.0 | 20110126
-   License: none (public domain)
-*/
+import { createGlobalStyle } from "styled-components";
 
+const GlobalStyle=createGlobalStyle`
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -55,14 +53,7 @@ table {
     font-family: 'Lexend Deca';
 }
 
-/* function axiosfunc(){
-	const promise= axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login",form);
-	promise.then(resultado);
-	function resultado(resp){
-		console.log("mandeiiiiiiiiiiiiiii",resp);
-	}
-	promise.catch(erro);
-	function erro(resp){
-		console.log(resp);
-	}
-} */
+body{
+    background-color: #E5E5E5;
+}`
+export default GlobalStyle;
