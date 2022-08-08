@@ -26,27 +26,27 @@ function DaysWeek({day,number,arr,setArr}){
     )
 }
 
-function ButtonCancelDiv({arr,namee}){
+function ButtonCancelDiv({arr,setNamee}){
     function CancelNewHabits(){
-        console.log("cancelou"+arr+namee);
+        setNamee("");
     }    
     return(
     <ButtonCancel onClick={CancelNewHabits}>Cancelar</ButtonCancel>)
 }
 
-function ButtonSaveDiv({arr,namee}){
+function ButtonSaveDiv({arr,namee ,setRenders,renders, setNamee}){
     const token=localStorage.getItem("token");
     function SaveNewHabits(){
             const newHabit={
                 name: namee,
                 days: arr};
             const config={headers:{Authorization:`Bearer ${token}`}};
-            postHabits(newHabit,config).then((resp)=>{console.log(resp)}).catch((resp)=>{console.log(resp.response.status)});          
+            postHabits(newHabit,config).then((resp)=>{console.log(resp);setRenders(!renders);setNamee("")}).catch((resp)=>{console.log(resp.response.status)});          
     }
     return(<ButtonSave onClick={SaveNewHabits}>Salvar</ButtonSave>)
 }
 
-export default function CreateHabitss(){
+export default function CreateHabitss({setRenders,renders}){
     const [arr,setArr]=useState([]);
     const [namee,setNamee]=useState("");
     const [des,setDes]=useState(false);
@@ -59,8 +59,8 @@ export default function CreateHabitss(){
                 {daysWeek.map((e,index)=>(<DaysWeek day={e.day} number={e.number} key={index} arr={arr} setArr={setArr} />))}
             </Days>
             <DivButton>
-            <ButtonCancelDiv arr={arr} namee={namee}/>
-            <ButtonSaveDiv arr={arr} namee={namee}/>
+            <ButtonCancelDiv setNamee={setNamee}/>
+            <ButtonSaveDiv arr={arr} setNamee={setNamee} namee={namee} setRenders={setRenders} renders={renders}/>
             </DivButton>
         </CreateHabits>
     )
@@ -77,6 +77,7 @@ const CreateHabits=styled.div`
     flex-direction: column;
     align-items: center;
     padding-top: 20px;
+
 `
 const InputHabits=styled.input`
     width: 303px;

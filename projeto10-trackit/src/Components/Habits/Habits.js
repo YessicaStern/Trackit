@@ -15,7 +15,7 @@ import AllHabits from "./AllHabits";
 export default function Habits(){
     const [ok,setOk]=useState(false);
     const {habits,setHabits}=useContext(AuthContext);
-    // const {token,setToken} =useContext(AuthContext);
+    //const {token,setToken} =useContext(AuthContext);
     const image=localStorage.getItem("image");
     const token =localStorage.getItem("token");
 
@@ -33,7 +33,7 @@ export default function Habits(){
         }).catch((e)=>{
                 console.log(e.response.status);
         })
-    },[renders])
+    },[!renders])
     return(
         <BodyHabits> 
             <Top/>
@@ -50,8 +50,10 @@ const BodyHabits=styled.div`
     display:flex;
     flex-direction:column;
     width: 100%;
+
 `
 const DivHabits=styled.div`
     height: 527px;
     background: #E5E5E5;
+    
 `

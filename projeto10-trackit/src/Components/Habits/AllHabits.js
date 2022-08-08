@@ -16,7 +16,7 @@ export default function AllHabits({renders,setRenders}) {
         <DivInit>
             <DivMore><h1>Meus Hábitos</h1><button onClick={() => { 
                 if (ok === false) { setOk(true) } else { setOk(false) } }}>+</button></DivMore>
-            {ok ? (<CreateHabitss />) : (console.log())}
+            {ok ? (<CreateHabitss setRenders={setRenders} renders={renders}/>) : (console.log())}
             <DivHabits>
             {habits.map((e,index) => (
                     <CreateHabits key={index} >
@@ -71,6 +71,9 @@ const DivHabits = styled.div`
     color: #666666;
     padding-left: 30px;
     padding-right: 30px;
+    &:last-child {
+        margin-bottom: 100px;
+    }
 `
 
 
