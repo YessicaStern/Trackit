@@ -12,17 +12,14 @@ import ZeroHabits from "./ ZeroHabits";
 import AllHabits from "./AllHabits";
 
 
+
 export default function Habits(){
     const [ok,setOk]=useState(false);
     const {habits,setHabits}=useContext(AuthContext);
-    //const {token,setToken} =useContext(AuthContext);
     const image=localStorage.getItem("image");
     const token =localStorage.getItem("token");
-
     const [renders,setRenders]= useState(true);
-    console.log ("renders="+renders);
     
-
     useEffect(()=>{
         const config={
             headers:{Authorization:`Bearer ${token}`}
@@ -50,10 +47,8 @@ const BodyHabits=styled.div`
     display:flex;
     flex-direction:column;
     width: 100%;
-
 `
 const DivHabits=styled.div`
     height: 527px;
     background: #E5E5E5;
-    
 `

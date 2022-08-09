@@ -3,16 +3,18 @@ import { useState } from "react";
 import { postHabits } from "../../Provider/AxiosTrackit";
 import { AuthContext } from "../../Provider/Auth";
 import React, { useContext } from "react";
+import { ThreeDots } from  'react-loader-spinner';
 
 
 function DaysWeek({day,number,arr,setArr}){
     const [color,setColor]=useState("#ffffff");
     const [click,setClick2]=useState(false);
 
+
     function DayClick(){
         if(!click){
             setClick2(!click);
-            setColor("#00008D");
+            setColor("#CFCFCF");
             if( !arr.includes(number)){setArr(arr,arr.push(number)); console.log("Array atualizado======= "+[arr])}
         }else{
             setClick2(!click);
@@ -34,33 +36,41 @@ function ButtonCancelDiv({arr,setNamee}){
     <ButtonCancel onClick={CancelNewHabits}>Cancelar</ButtonCancel>)
 }
 
-function ButtonSaveDiv({arr,namee ,setRenders,renders, setNamee}){
+function ButtonSaveDiv({arr,namee ,setRenders,renders, setNamee,setButonSave,butonSave}){
+
     const token=localStorage.getItem("token");
     function SaveNewHabits(){
+        // setButonSave(<Ball><ThreeDots color="black" height={80} width={80}/></Ball>)
             const newHabit={
                 name: namee,
                 days: arr};
             const config={headers:{Authorization:`Bearer ${token}`}};
-            postHabits(newHabit,config).then((resp)=>{console.log(resp);setRenders(!renders);setNamee("")}).catch((resp)=>{console.log(resp.response.status)});          
+            postHabits(newHabit,config).then((resp)=>{console.log(resp);setRenders(!renders);setNamee("");})
+            .catch((resp)=>{alert("Todos os campos devem estar preenchidos");
+            // setButonSave("Salvar");
+        });          
     }
-    return(<ButtonSave onClick={SaveNewHabits}>Salvar</ButtonSave>)
+    return(<ButtonSave onClick={SaveNewHabits}>{butonSave}</ButtonSave>)
 }
 
 export default function CreateHabitss({setRenders,renders}){
+    const [butonSave,setButonSave]=useState("Salvar");
     const [arr,setArr]=useState([]);
     const [namee,setNamee]=useState("");
     const [des,setDes]=useState(false);
-    const daysWeek=[{day:"D", number: 1},{day:"S", number: 2},{day:"T", number: 3},{day:"Q", number: 4},{day:"Q", number: 5},{day:"S", number: 6},{day:"S", number: 7}];
+    const daysWeek=[{day:"D", number: 0},{day:"S", number: 1},{day:"T", number: 2},{day:"Q", number: 3},{day:"Q", number: 4},
+    {day:"S", number: 5},{day:"S", number: 6}];
     
     return(
         <CreateHabits>
-            <InputHabits disabled={des} placeholder="nome do hábito" type="text" name="name" value={namee} onChange={(e)=>{e.preventDefault();setNamee(e.target.value)}} required></InputHabits>
+            <InputHabits disabled={des} placeholder="nome do hábito" type="text" name="name" value={namee} 
+            onChange={(e)=>{e.preventDefault();setNamee(e.target.value)}} required></InputHabits>
             <Days>
                 {daysWeek.map((e,index)=>(<DaysWeek day={e.day} number={e.number} key={index} arr={arr} setArr={setArr} />))}
             </Days>
             <DivButton>
             <ButtonCancelDiv setNamee={setNamee}/>
-            <ButtonSaveDiv arr={arr} setNamee={setNamee} namee={namee} setRenders={setRenders} renders={renders}/>
+            <ButtonSaveDiv arr={arr} setNamee={setNamee} namee={namee} setRenders={setRenders} renders={renders} butonSave={butonSave} setButonSave={setButonSave}/>
             </DivButton>
         </CreateHabits>
     )
@@ -151,4 +161,8 @@ const ButtonSave=styled.button`
 const DivButton=styled.div`
     margin-top:20px;
     margin-left:115px;
+`
+
+const Ball=styled.div`
+
 `

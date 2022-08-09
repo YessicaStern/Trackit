@@ -7,6 +7,7 @@ import Habits from "./Components/Habits/Habits";
 import Login from "./Components/Init/Login";
 import Registration from './Components/Init/Registration';
 import Today from './Components/Container/Today';
+import Historic from './Components/Container/Historic';
 
 
 export default function App(){
@@ -20,6 +21,7 @@ export default function App(){
         <Route path="/cadastro" element={<Registration/>}/>
         <Route path="/habitos" element={<Habits/>}/>
         <Route path="/hoje" element={<Today/>}/>
+        <Route path="/historico" element={<Historic/>}/>
     </Routes>
   </BrowserRouter>
   </AuthProvider>

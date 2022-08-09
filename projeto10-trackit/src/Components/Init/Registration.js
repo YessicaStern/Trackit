@@ -2,9 +2,12 @@ import styled from "styled-components";
 import {React, useState} from "react";
 import { useNavigate } from "react-router-dom"
 import { postRegistration } from "../../Provider/AxiosTrackit";
+import { ThreeDots } from  'react-loader-spinner';
 
 export default function Registration(){   
     const navigate=useNavigate();
+    const [wait,setWait]=useState(false);
+    const [butonEnter,setButonEnter]=useState("Cadastrar");
     const [form,setForm]=useState({
         email:"",
         name:"",
@@ -18,16 +21,19 @@ export default function Registration(){
         setForm({...form,[e.target.name]:e.target.value,});
     } 
     function signUp(){
-        postRegistration(form).then((resp)=>{navigate("/");console.log(resp)}).catch((resp)=>{alert("Por favor preencha os campos corretamente")});
+        setButonEnter(<Ball><ThreeDots color="white" height={80} width={80}/></Ball>);
+        setWait(true)
+        postRegistration(form).then((resp)=>{navigate("/");console.log(resp)})
+        .catch((resp)=>{alert("Por favor preencha os campos corretamente");setWait(false);setButonEnter("Cadastrar")});
     }
     return(<DivRegistration>
         <ImgRegistration src="./imgs/icone.svg"/>
         <FormRegistration onSubmit={handleForm}>
-            <EmailRegistration placeholder ="email" type="email" name="email" onChange={handleForm} required />
-            <PasswordRegistration placeholder="senha" type="password" name="password" onChange={handleForm} required/>
-            <NameRegistration placeholder ="nome" type="text" name="name" onChange={handleForm} required />
-            <PhotoRegistration placeholder ="foto" type="url" name="image" onChange={handleForm} required />
-            <ButtonRegistration onClick={signUp}>Cadastrar</ButtonRegistration>
+            <EmailRegistration disabled={wait} placeholder ="email" type="email" name="email" onChange={handleForm} required />
+            <PasswordRegistration disabled={wait}  placeholder="senha" type="password" name="password" onChange={handleForm} required/>
+            <NameRegistration disabled={wait}  placeholder ="nome" type="text" name="name" onChange={handleForm} required />
+            <PhotoRegistration disabled={wait}  placeholder ="foto" type="url" name="image" onChange={handleForm} required />
+            <ButtonRegistration disabled={wait}  onClick={signUp}>{butonEnter}</ButtonRegistration>
         </FormRegistration>          
         <H1Registration onClick={()=>{navigate("/")}}>Já tem uma conta? Faça login!</H1Registration>
     </DivRegistration>)
@@ -57,6 +63,9 @@ const EmailRegistration=styled.input`
     margin-bottom: 5px;
     outline: none;
     padding: 10px;
+    color: ${props => (
+            props.disabled ? "#DBDBDB" : "#00000"
+        ) };
 
     ::placeholder{
         font-style: normal;
@@ -94,5 +103,9 @@ const H1Registration=styled.h1`
     color: #52B6FF;
 `
 
+const Ball=styled.div`
+    margin-top: -20px;
+    margin-left: 100px;
+`
 
 

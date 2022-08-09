@@ -2,6 +2,7 @@ import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react";
 import { postLogin } from "../../Provider/AxiosTrackit";
+import { ThreeDots } from  'react-loader-spinner';
 
 import React from "react";
 import { AuthContext } from "../../Provider/Auth";
@@ -9,7 +10,9 @@ import { AuthContext } from "../../Provider/Auth";
 export default function Login(){
     const {token,setToken}=React.useContext(AuthContext);
     const {habits,setHabits}=React.useContext(AuthContext);
+    const [wait,setWait]=useState(false);
     const navigate=useNavigate();
+    const [butonEnter,setButonEnter]=useState("Entrar");
     const [form,setForm]=useState({
         email:"",
         password:"",    
@@ -20,15 +23,21 @@ export default function Login(){
         setHabits([]);
     }
     function axiosfunc(){
-        postLogin(form).then((resp)=>{setToken(resp.data.token);localStorage.setItem("token",resp.data.token);localStorage.setItem("image",resp.data.image);navigate("/hoje")}).catch((resp)=>(console.log(resp.response.status)));
+        setWait(true);
+        setButonEnter(<Ball><ThreeDots color="white" height={80} width={80}/></Ball>)
+        postLogin(form).then((resp)=>{setToken(resp.data.token);
+            localStorage.setItem("token",resp.data.token);
+            localStorage.setItem("image",resp.data.image);
+            navigate("/hoje")})
+        .catch((resp)=>(setWait(false), setButonEnter("Entrar"), alert("Email ou senha inválidos")));
     }
     return(<DivLogin>
         <ImgLogin src="./imgs/icone.svg"/>
         <FormLogin>
-            <EmailLogin placeholder ="email" type="email" name="email" onChange={handleForm} required />
-            <PasswordLogin placeholder="senha" type="password" name="password" onChange={handleForm} required/>
+            <EmailLogin  disabled={wait} placeholder ="email" type="email" name="email" onChange={handleForm} required />
+            <PasswordLogin disabled={wait} placeholder="senha" type="password" name="password" onChange={handleForm} required/>
         </FormLogin>
-        <ButtonLogin onClick={axiosfunc}>Entrar</ButtonLogin>
+        <ButtonLogin disabled={wait} onClick={axiosfunc}>{butonEnter}</ButtonLogin>
         <H1Login onClick={()=>{navigate("/cadastro")}}>Não tem uma conta? Cadastre-se!</H1Login>
     </DivLogin>)
 }
@@ -58,6 +67,9 @@ const EmailLogin=styled.input`
     margin-bottom: 5px;
     outline: none;
     padding: 10px;
+    color: ${props => (
+            props.disabled ? "#DBDBDB" : "#00000"
+        ) };
 
     ::placeholder{
         font-style: normal;
@@ -91,4 +103,7 @@ const H1Login=styled.h1`
     text-decoration-line: underline;
     color: #52B6FF;
 `
-
+const Ball=styled.div`
+    margin-top: -20px;
+    margin-left: 100px;
+`
